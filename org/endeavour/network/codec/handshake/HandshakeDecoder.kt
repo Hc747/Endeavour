@@ -10,13 +10,13 @@ import java.util.*
  * @version 1.0
  * @since 24/9/17
  */
-sealed class HandshakeDecoderK : ByteToMessageDecoder() {
+class HandshakeDecoder : ByteToMessageDecoder() {
 
     enum class HandshakeOpcode(private val id: Int) {
 
         DECODE_LOGIN(14),
         DECODE_JAGGRAB(15);
-        //DECODE_ACCOUNT_CREATION(28)
+        //DECODE_ACCOUNT_CREATION(28)//TODO
 
         companion object {
 
@@ -32,33 +32,10 @@ sealed class HandshakeDecoderK : ByteToMessageDecoder() {
 
             val opcode = HandshakeOpcode.lookup(buffer.readUnsignedByte())
 
-            opcode.ifPresent { System.out.println("Handshake Decoder: $it") }
+            opcode.ifPresent { System.out.println("Handshake Decoder: $it") } //TODO: implementation
 
             ctx.pipeline().remove(this)
         }
     }
-
-    /*
-    @Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
-		if (buffer.isReadable()) {
-			int opcode = buffer.readUnsignedByte();
-
-			switch (opcode) {
-				case DECODE_LOGIN:
-					ctx.pipeline().addLast(LoginDecoder.class.getSimpleName(), new LoginDecoder());
-					break;
-				case DECODE_JAG_GRAB:
-					ctx.pipeline().addLast(JagGrabDecoder.class.getSimpleName(), new JagGrabDecoder());
-					break;
-				default:
-					ctx.channel().close();
-					return;
-			}
-
-			ctx.pipeline().remove(this);
-		}
-	}
-     */
 
 }
